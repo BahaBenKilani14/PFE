@@ -20,4 +20,8 @@ export class UpdateDemandeurDto {
   @IsOptional()
   @IsString()
   préférenceAlimentaire?: string;
+
+  @IsOptional()
+  @IsString()
+  motDePasse?: string;
 }

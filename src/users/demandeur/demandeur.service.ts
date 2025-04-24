@@ -6,6 +6,7 @@ import { Demandeur } from './entities/demandeur.entity';
 import { CreateDemandeurDto } from './dto/create-demandeur.dto';
 import { UpdateDemandeurDto } from './dto/update-demandeur.dto';
 import { NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class DemandeurService {
@@ -14,9 +15,22 @@ export class DemandeurService {
     private readonly demandeurRepository: Repository<Demandeur>,
   ) {}
 
+  // Hash password
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    return bcrypt.hash(password, salt);
+  }
+
   // Create a new demandeur
   async create(createDemandeurDto: CreateDemandeurDto): Promise<Demandeur> {
-    const newDemandeur = this.demandeurRepository.create(createDemandeurDto);
+    // Hash the password
+    const hashedPassword = await this.hashPassword(createDemandeurDto.motDePasse);
+    
+    const newDemandeur = this.demandeurRepository.create({
+      ...createDemandeurDto,
+      motDePasse: hashedPassword
+    });
+    
     return this.demandeurRepository.save(newDemandeur);
   }
 
@@ -38,6 +52,11 @@ export class DemandeurService {
 
   // Update a demandeur by ID
   async update(id: number, updateDemandeurDto: UpdateDemandeurDto): Promise<Demandeur> {
+    // If password is being updated, hash it
+    if (updateDemandeurDto.motDePasse) {
+      updateDemandeurDto.motDePasse = await this.hashPassword(updateDemandeurDto.motDePasse);
+    }
+    
     await this.demandeurRepository.update(id, updateDemandeurDto);
     return this.findOne(id);  // Return the updated demandeur
   }

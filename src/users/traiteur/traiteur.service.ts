@@ -6,6 +6,7 @@ import { Traiteur } from './entities/traiteur.entity';
 import { CreateTraiteurDto } from './dto/create-traiteur.dto';
 import { UpdateTraiteurDto } from './dto/update-traiteur.dto';
 import { Plat } from 'src/plat/entities/plat.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class TraiteurService {
@@ -16,9 +17,20 @@ export class TraiteurService {
     private readonly platRepository: Repository<Plat>,
   ) {}
 
+  // Hash password
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    return bcrypt.hash(password, salt);
+  }
+
   // Create a new traiteur
   async create(createTraiteurDto: CreateTraiteurDto) {
     const { listePlats, ...traiteurData } = createTraiteurDto;
+    
+    // Hash the password
+    if (traiteurData.motDePasse) {
+      traiteurData.motDePasse = await this.hashPassword(traiteurData.motDePasse);
+    }
     
     // Create the traiteur entity
     const newTraiteur = this.traiteurRepository.create(traiteurData);
@@ -49,6 +61,11 @@ export class TraiteurService {
   // Update a traiteur by id
   async update(id: number, updateTraiteurDto: UpdateTraiteurDto) {
     const { listePlats, ...traiteurData } = updateTraiteurDto;
+    
+    // Hash the password if it's being updated
+    if (traiteurData.motDePasse) {
+      traiteurData.motDePasse = await this.hashPassword(traiteurData.motDePasse);
+    }
     
     // Update basic traiteur data
     await this.traiteurRepository.update(id, traiteurData);

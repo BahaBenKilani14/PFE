@@ -1,4 +1,3 @@
-
 //fournisseur.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Fournisseur } from './entities/fournisseur.entity';
 import { CreateFournisseurDto } from './dto/create-fournisseur.dto';
 import { UpdateFournisseurDto } from './dto/update-fournisseur.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class FournisseurService {
@@ -14,8 +14,19 @@ export class FournisseurService {
     private readonly fournisseurRepository: Repository<Fournisseur>,
   ) {}
 
+  // Hash password
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    return bcrypt.hash(password, salt);
+  }
+
   // Create a new fournisseur
   async create(createFournisseurDto: CreateFournisseurDto) {
+    // Hash the password
+    if (createFournisseurDto.motDePasse) {
+      createFournisseurDto.motDePasse = await this.hashPassword(createFournisseurDto.motDePasse);
+    }
+    
     const newFournisseur = this.fournisseurRepository.create(createFournisseurDto);
     return this.fournisseurRepository.save(newFournisseur);
   }
@@ -36,6 +47,11 @@ export class FournisseurService {
 
   // Update a fournisseur by id
   async update(id: number, updateFournisseurDto: UpdateFournisseurDto) {
+    // Hash the password if it's being updated
+    if (updateFournisseurDto.motDePasse) {
+      updateFournisseurDto.motDePasse = await this.hashPassword(updateFournisseurDto.motDePasse);
+    }
+    
     await this.fournisseurRepository.update(id, updateFournisseurDto);
     return this.fournisseurRepository.findOne({ where: { id } });
   }
