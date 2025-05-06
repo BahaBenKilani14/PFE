@@ -1,0 +1,116 @@
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <mat-icon class="text-orange-500 text-3xl mr-2" style="font-size: 2rem">lunch_dining</mat-icon>
+        <span class="text-2xl font-bold text-orange-500">Ftouri</span>
+      </div>
+
+      <!-- Desktop Navigation Links -->
+      <div class="hidden md:flex space-x-8 items-center">
+        <a routerLink="/categories" class="nav-link">Categories</a>
+        <a routerLink="/top-restaurants" class="nav-link">Top Restaurants</a>
+        <a routerLink="/offers" class="nav-link">Special Offers</a>
+        <a routerLink="/about" class="nav-link">About Us</a>
+      </div>
+
+      <!-- Buttons -->
+      <div class="hidden md:flex space-x-4">
+        <button class="business-btn">For Restaurants</button>
+        <button class="login-btn" routerLink="/login">Log in</button>
+        <button class="signup-btn" routerLink="/signup">Sign up</button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden flex items-center">
+        <button (click)="toggleMobileMenu()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="md:hidden" [class.hidden]="!isMobileMenuOpen">
+    <a routerLink="/categories" class="mobile-nav-link">Categories</a>
+    <a routerLink="/top-restaurants" class="mobile-nav-link">Top Restaurants</a>
+    <a routerLink="/offers" class="mobile-nav-link">Special Offers</a>
+    <a routerLink="/about" class="mobile-nav-link">About Us</a>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-gradient text-white text-center py-16">
+  <h1 class="text-4xl font-extrabold mb-4">Your favorite food, delivered fast 🍽️</h1>
+  <p class="text-lg mb-6">Order from the best restaurants in your city and get it delivered to your door</p>
+  <div class="flex justify-center space-x-4 mb-6">
+    <a href="#" class="signup-btn">Order Now</a>
+    <a href="#" class="business-btn">Become a Partner</a>
+  </div>
+
+  <!-- Search Bar -->
+  <form class="flex justify-center">
+    <input type="text" class="search-input w-64 rounded-l-md" placeholder="Search for dishes or restaurants">
+    <button class="search-button rounded-r-md" type="submit">
+      <mat-icon>search</mat-icon>
+    </button>
+  </form>
+</section>
+
+<!-- Categories Section -->
+<section class="max-w-7xl mx-auto py-12 px-4 text-center">
+  <h2 class="text-3xl font-bold text-gray-800 mb-6">Explore Categories</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="bg-orange-100 rounded-lg p-4 hover:bg-orange-200 transition">
+      <mat-icon class="text-orange-500 text-4xl mb-2">local_pizza</mat-icon>
+      <p class="font-semibold">Pizza</p>
+    </div>
+    <div class="bg-orange-100 rounded-lg p-4 hover:bg-orange-200 transition">
+      <mat-icon class="text-orange-500 text-4xl mb-2">ramen_dining</mat-icon>
+      <p class="font-semibold">Asian</p>
+    </div>
+    <div class="bg-orange-100 rounded-lg p-4 hover:bg-orange-200 transition">
+      <mat-icon class="text-orange-500 text-4xl mb-2">lunch_dining</mat-icon>
+      <p class="font-semibold">Burgers</p>
+    </div>
+    <div class="bg-orange-100 rounded-lg p-4 hover:bg-orange-200 transition">
+      <mat-icon class="text-orange-500 text-4xl mb-2">emoji_food_beverage</mat-icon>
+      <p class="font-semibold">Drinks</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="bg-gray-100 py-12">
+  <div class="max-w-5xl mx-auto text-center px-4">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">What our customers say</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow">
+        <p class="italic">"Fast delivery and delicious food. Highly recommended!"</p>
+        <p class="font-semibold mt-4">- Aymen, Tunis</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow">
+        <p class="italic">"The variety is amazing. I always find what I want."</p>
+        <p class="font-semibold mt-4">- Rania, Sousse</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow">
+        <p class="italic">"Great service and friendly delivery people."</p>
+        <p class="font-semibold mt-4">- Yassine, Sfax</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-8">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+    <p>&copy; 2025 Ftouri. All rights reserved.</p>
+    <div class="flex space-x-4 mt-4 md:mt-0">
+      <a href="#" class="hover:text-orange-400">Contact</a>
+      <a href="#" class="hover:text-orange-400">Privacy Policy</a>
+      <a href="#" class="hover:text-orange-400">Instagram</a>
+    </div>
+  </div>
+</footer>
