@@ -5,6 +5,10 @@ import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginComponent } from './pages/login/login.component';
+import { TraiteurHomeComponent } from './traiteur-home/traiteur-home.component';
+import { HomeComponent } from './pages/home/home.component';
+import { AppComponent } from './app.component';
 
 
 @NgModule({
@@ -13,6 +17,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     HttpClientModule,
+    LoginComponent,
+    TraiteurHomeComponent,
+    HomeComponent,
+    AppComponent
   ],
   providers: [
     {
@@ -20,7 +28,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       useClass: AuthInterceptor,
       multi: true,
     },
+  
   ],
-
-})
+  bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,]
+})  
 export class AppModule {}

@@ -1,0 +1,164 @@
+/* TraiteurHomeComponent.scss */
+
+/* Navigation Links */
+.nav-link {
+    position: relative;
+    padding: 0.5rem 0;
+    font-weight: 500;
+    color: #374151; /* Gray-700 */
+    transition: color 0.3s;
+  }
+  
+  .nav-link:hover {
+    color: #d97706; /* Amber-600 (plus chic que orange vif) */
+  }
+  
+  .mobile-nav-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: #374151;
+    border-radius: 0.375rem;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .mobile-nav-link:hover {
+    background-color: #fef9c3; /* Amber-100 */
+    color: #d97706;
+  }
+  
+  /* For Business (Partner Button) */
+  .business-btn {
+    background-color: white;
+    color: #d97706;
+    border: 2px solid #d97706;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .business-btn:hover {
+    background-color: #d97706;
+    color: white;
+  }
+  
+  /* Login Button */
+  .login-btn {
+    background-color: transparent;
+    color: #374151;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .login-btn:hover {
+    color: #d97706;
+  }
+  
+  /* Signup Button */
+  .signup-btn {
+    background-color: #d97706;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+  
+  .signup-btn:hover {
+    background-color: #b45309; /* Amber-700 */
+  }
+  
+  /* Hero Section Gradient */
+  .hero-gradient {
+    background: linear-gradient(90deg, #f59e0b, #fcd34d); 
+    /* Amber clair vers jaune pâle */
+    color: white;
+  }
+  
+  .hero-gradient-overlay {
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.9), rgba(253, 224, 71, 0.9));
+  }
+  
+  /* Hero Section CTA buttons */
+  .cta-browse-products {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s;
+  }
+  
+  .cta-offers {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  /* Search Bar */
+  .search-input {
+    padding: 0.5rem 1rem;
+    border: none;
+    outline: none;
+    border-radius: 0 0.375rem 0.375rem 0;
+  }
+  
+  .search-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    background-color: #d97706;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .search-button:hover {
+    background-color: #b45309;
+  }
+  
+  /* Category Card */
+  .category-card {
+    background-color: #fff7ed;
+    border: 1px solid #fcd34d;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  .category-card:hover {
+    background-color: #fef3c7;
+    border-color: #fbbf24;
+  }
+  
+  /* Testimonials */
+  .testimonial-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .testimonial-card p {
+    color: #6b7280; /* Gray-500 */
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #1f2937; /* Gray-800 */
+    color: white;
+    padding: 2rem 1rem;
+  }
+  
+  footer a {
+    color: #d1d5db; /* Gray-300 */
+    transition: color 0.3s;
+  }
+  
+  footer a:hover {
+    color: #fcd34d; /* Amber-300 */
+  }
+  

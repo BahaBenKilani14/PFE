@@ -58,7 +58,7 @@ export class LoginComponent {
             console.log('=====================');
 
             // Redirect to home page or dashboard
-            this.router.navigate(['/home']);
+            this.router.navigate(['traiteur-home']);
           } else {
             console.error('No access_token in response:', response);
             this.errorMessage = 'Invalid response from server';
