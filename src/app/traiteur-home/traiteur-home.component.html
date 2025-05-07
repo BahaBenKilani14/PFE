@@ -12,7 +12,7 @@
         <!-- Desktop Navigation Links (Traiteur Links) -->
         <div class="hidden md:flex space-x-8 items-center">
           <a routerLink="/traiteur/commandes" class="nav-link">Commandes</a>
-          <a routerLink="/traiteur/plats" class="nav-link">Mes Plats</a>
+          <a routerLink="/traiteur-plats" class="nav-link">Mes Plats</a>
           <a routerLink="/traiteur/disponibilites" class="nav-link">Disponibilités</a>
         </div>
   
@@ -33,7 +33,7 @@
     <!-- Mobile Menu -->
     <div class="md:hidden" [class.hidden]="!isMobileMenuOpen">
       <a routerLink="/traiteur/commandes" class="mobile-nav-link">Commandes</a>
-      <a routerLink="/traiteur/plats" class="mobile-nav-link">Mes Plats</a>
+      <a routerLink="/traiteur-plats" class="mobile-nav-link">Mes Plats</a>
       <a routerLink="/traiteur/disponibilites" class="mobile-nav-link">Disponibilités</a>
     </div>
   </nav>
@@ -43,10 +43,6 @@
     <h1 class="text-4xl font-extrabold mb-4">Bienvenue dans votre espace Traiteur 🍽️</h1>
     <p class="text-lg mb-6">Gérez facilement vos commandes, plats et disponibilités</p>
   
-    <div class="flex justify-center space-x-4 mb-6">
-      <a routerLink="/traiteur/commandes" class="signup-btn">Voir les commandes</a>
-      <a routerLink="/traiteur/plats" class="business-btn">Gérer mes plats</a>
-      <a routerLink="/traiteur/disponibilites" class="business-btn">Mes disponibilités</a>
-    </div>
+    
   </section>
   

@@ -1,0 +1,46 @@
+<!-- src/app/mes-plats/mes-plats.component.html -->
+<app-traiteur-home></app-traiteur-home>
+<div class="container">
+    <h1>Gérer Mes Plats</h1>
+  
+    <form (ngSubmit)="ajouterPlat()" #platForm="ngForm">
+      <label for="nom">Nom</label>
+      <input type="text" id="nom" [(ngModel)]="newPlat.nom" name="nom" required />
+  
+      <label for="description">Description</label>
+      <textarea id="description" [(ngModel)]="newPlat.description" name="description"></textarea>
+  
+      <label for="prix">Prix (DT)</label>
+      <input type="number" id="prix" [(ngModel)]="newPlat.prix" name="prix" required />
+  
+      <label for="image">Image (URL)</label>
+      <input type="text" id="image" [(ngModel)]="newPlat.image" name="image" />
+  
+      <label>
+        <input type="checkbox" [(ngModel)]="newPlat.disponible" name="disponible" />
+        Disponible
+      </label>
+  
+      <button type="submit">Ajouter Plat</button>
+    </form>
+  
+    <hr />
+  
+    <h2>Mes Plats</h2>
+    <ul class="plats-list">
+      <li *ngFor="let plat of plats">
+        <img [src]="plat.image" alt="Image du plat" *ngIf="plat.image" width="80" height="60" />
+        <div>
+          <strong>{{ plat.nom }}</strong> - {{ plat.prix }} DT
+          <p>{{ plat.description }}</p>
+          <span *ngIf="plat.disponible" class="dispo">✔️ Disponible</span>
+          <span *ngIf="!plat.disponible" class="indispo">❌ Indisponible</span>
+        </div>
+      </li>
+    </ul>
+  
+    <button (click)="logout()" class="logout-btn">
+      <mat-icon>logout</mat-icon> Déconnexion
+    </button>
+  </div>
+  
