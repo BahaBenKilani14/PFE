@@ -5,7 +5,7 @@ import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppComponent } from './app.component';
+
 
 @NgModule({
   imports: [
@@ -21,6 +21,6 @@ import { AppComponent } from './app.component';
       multi: true,
     },
   ],
-  bootstrap: [AppComponent],
+
 })
 export class AppModule {}

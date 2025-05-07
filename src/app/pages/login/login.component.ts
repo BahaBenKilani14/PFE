@@ -42,14 +42,14 @@ export class LoginComponent {
       .subscribe({
         next: (response: any) => {
           // Store the token
-          if (response.accessToken) {
-            this.authService.setToken(response.accessToken);
+          if (response.access_token) {
+            this.authService.setToken(response.access_token);
 
             // Detailed console logging
             console.log('=== Login Successful ===');
             console.log('Response:', response);
             console.log('User ID:', response.id);
-            console.log('Access Token:', response.accessToken);
+            console.log('Access_token:', response.access_token);
             console.log(
               'Token stored in localStorage:',
               this.authService.getToken()
@@ -60,7 +60,7 @@ export class LoginComponent {
             // Redirect to home page or dashboard
             this.router.navigate(['/home']);
           } else {
-            console.error('No access token in response:', response);
+            console.error('No access_token in response:', response);
             this.errorMessage = 'Invalid response from server';
           }
         },
