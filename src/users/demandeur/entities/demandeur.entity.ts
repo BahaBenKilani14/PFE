@@ -40,6 +40,7 @@ export class Demandeur {
   @Column({ nullable: true })
   préférenceAlimentaire: string;
 
+
   // One Demandeur can make many commandes
   @ApiProperty(DemandeurProperties.commandes)
   @OneToMany(() => Commande, (commande) => commande.demandeur)
@@ -54,5 +55,6 @@ export class Demandeur {
   @ApiProperty(DemandeurProperties.paiements)
   @OneToMany(() => Paiement, (paiement) => paiement.demandeur)
   paiements: Paiement[];
+  emailVerified: boolean;
 }
 

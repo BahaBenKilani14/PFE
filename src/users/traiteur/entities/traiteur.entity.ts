@@ -24,6 +24,8 @@ export class Traiteur {
   @Column({ nullable: true })
   zoneLivraison: string;
 
+  emailVerified: boolean;
+
   // Establishing a Many-to-Many relationship with Plat
   @ManyToMany(() => Plat)
   @JoinTable()  // This decorator creates the join table that manages the many-to-many relationship

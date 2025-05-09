@@ -31,6 +31,8 @@ export class Livreur {
   @Column({ default: true })
   disponible: boolean;
 
+  emailVerified: boolean;
+
   // One Livreur can deliver many commandes
   @OneToMany(() => Commande, (commande) => commande.livreur)
   commandesLivrées: Commande[];

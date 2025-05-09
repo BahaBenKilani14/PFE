@@ -25,6 +25,8 @@ export class Fournisseur {
 
       @Column({ nullable: true })
       entreprise: string;
+          
+      emailVerified: boolean;
 
       
       

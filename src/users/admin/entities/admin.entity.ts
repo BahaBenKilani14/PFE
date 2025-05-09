@@ -23,4 +23,6 @@ export class Admin  {
     @Column({ nullable: true })
     adresse: string;
 
+    emailVerified: boolean;
+
 }

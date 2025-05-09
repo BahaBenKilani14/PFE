@@ -13,12 +13,14 @@ export class PlatService {
     private readonly platRepository: Repository<Plat>,
   ) {}
 
-  create(createPlatDto: CreatePlatDto) {
-    const plat = this.platRepository.create(createPlatDto);
-    return this.platRepository.save(plat);
-  }
+  private plats: { id: string; nom: string; description: string; prix: number; image?: string; disponible?: boolean }[] = [];
 
-  findAll() {
+  async create(createPlatDto: CreatePlatDto): Promise<Plat> {
+    const newPlat = this.platRepository.create(createPlatDto);
+    return await this.platRepository.save(newPlat);
+  }
+  
+  async findAll(): Promise<Plat[]> {
     return this.platRepository.find();
   }
 

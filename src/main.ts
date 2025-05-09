@@ -5,9 +5,14 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+  app.setGlobalPrefix('api');
+
   // Enable CORS
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://localhost:4200', // Replace with your Angular app's URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   
   // Apply validation globally with transform enabled to automatically convert query params
   app.useGlobalPipes(new ValidationPipe({

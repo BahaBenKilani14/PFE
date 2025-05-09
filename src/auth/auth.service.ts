@@ -1,189 +1,113 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from './dto/login.dto';
-import * as bcrypt from 'bcrypt';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
+import { VerificationToken } from './verification-token.entity';
 import { Demandeur } from 'src/users/demandeur/entities/demandeur.entity';
 import { Admin } from 'src/users/admin/entities/admin.entity';
 import { Traiteur } from 'src/users/traiteur/entities/traiteur.entity';
 import { Livreur } from 'src/users/livreur/entities/livreur.entity';
 import { Fournisseur } from 'src/users/fournisseur/entities/fournisseur.entity';
-import { VerificationToken } from './verification-token.entity';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
-
-
-    @InjectRepository(Demandeur)
-    private demandeurRepo: Repository<Demandeur>,
-
-    @InjectRepository(Admin)
-    private adminRepo: Repository<Admin>,
-
-    @InjectRepository(Traiteur)
-    private traiteurRepo: Repository<Traiteur>,
-
-    @InjectRepository(Livreur)
-    private livreurRepo: Repository<Livreur>,
-
-    @InjectRepository(Fournisseur)
-    private fournisseurRepo: Repository<Fournisseur>,
-
     @InjectRepository(VerificationToken)
-    private verificationTokenRepo: Repository<VerificationToken>,
+    private readonly verificationTokenRepo: Repository<VerificationToken>,
+    @InjectRepository(Demandeur)
+    private readonly demandeurRepo: Repository<Demandeur>,
+    @InjectRepository(Admin)
+    private readonly adminRepo: Repository<Admin>,
+    @InjectRepository(Traiteur)
+    private readonly traiteurRepo: Repository<Traiteur>,
+    @InjectRepository(Livreur)
+    private readonly livreurRepo: Repository<Livreur>,
+    @InjectRepository(Fournisseur)
+    private readonly fournisseurRepo: Repository<Fournisseur>,
+    private readonly jwtService: JwtService, // Inject JwtService for token generation
   ) {}
 
-  // Hash the password before saving
-  async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt();
-    return bcrypt.hash(password, salt);
-  }
-
-  // Validate the user's email and password (hashing comparison)
-  async validateUser(email: string, motDePasse: string) {
-    const entities = [
-      { repo: this.demandeurRepo, role: 'demandeur' },
-      { repo: this.adminRepo, role: 'admin' },
-      { repo: this.traiteurRepo, role: 'traiteur' },
-      { repo: this.livreurRepo, role: 'livreur' },
-      { repo: this.fournisseurRepo, role: 'fournisseur' },
-    ];
-
-    for (const entity of entities) {
-      const user = await entity.repo.findOne({ where: { email } });
-      if (user) {
-        // Compare hashed password with the provided plain text password
-        const passwordMatch = await bcrypt.compare(
-          motDePasse,
-          user.motDePasse,
-        );
-        if (passwordMatch) {
-          return { id: user.id, email: user.email, role: entity.role };
-        }
-      }
+  // Login method
+  async login(email: string, motDePasse: string): Promise<any> {
+    let user;
+  
+    // Search for the user in all repositories
+    user =
+      (await this.demandeurRepo.findOne({ where: { email } })) ||
+      (await this.adminRepo.findOne({ where: { email } })) ||
+      (await this.traiteurRepo.findOne({ where: { email } })) ||
+      (await this.livreurRepo.findOne({ where: { email } })) ||
+      (await this.fournisseurRepo.findOne({ where: { email } }));
+  
+    // Check if the user exists
+    if (!user) {
+      throw new Error('Invalid credentials');
     }
-
-    throw new UnauthorizedException('Invalid email or password');
+  
+    // Compare the provided password with the hashed password
+    const passwordMatch = await bcrypt.compare(motDePasse, user.motDePasse);
+    if (!passwordMatch) {
+      throw new Error('Invalid credentials');
+    }
+  
+    // Generate a JWT token
+    const payload = { sub: user.id };
+    return { access_token: this.jwtService.sign(payload) };
   }
 
-  // Handle login and return JWT token
-  async login(loginDto: LoginDto) {
-    const user = await this.validateUser(
-      loginDto.email,
-      loginDto.motDePasse,
-    );
+  // Register method
+  async register(payload: any): Promise<any> {
+    const hashedPassword = await bcrypt.hash(payload.motDePasse, 10);
 
-    const payload = { sub: user.id, email: user.email, role: user.role };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
-
-  // Register a user with hashed password and send verification email
-  async registerDemandeur(demandeurDto: any) {
-    const hashedPassword = await this.hashPassword(demandeurDto.motDePasse);
-    const newDemandeur = this.demandeurRepo.create({
-      ...demandeurDto,
-      motDePasse: hashedPassword,
-    });
-    await this.demandeurRepo.save(newDemandeur);
-
-    await this.sendVerificationEmail(newDemandeur, 'demandeur');
-
-    return newDemandeur;
-  }
-
-  // Send the email verification token
-  async sendVerificationEmail(user: any, userType: string) {
-    const token = this.jwtService.sign(
-      { userId: user.id, userType },
-      { expiresIn: '1h' },
-    ); // Token with expiration
-
-    const verificationToken = this.verificationTokenRepo.create({
-      token,
-      userType,
-      createdAt: new Date(),
-    });
-    
-    // Set the correct user entity based on userType
-    switch (userType) {
+    switch (payload.role) {
       case 'demandeur':
-        verificationToken.demandeur = user;
-        break;
+        return this.demandeurRepo.save({ ...payload, motDePasse: hashedPassword });
       case 'admin':
-        verificationToken.admin = user;
-        break;
+        return this.adminRepo.save({ ...payload, motDePasse: hashedPassword });
       case 'traiteur':
-        verificationToken.traiteur = user;
-        break;
+        return this.traiteurRepo.save({ ...payload, motDePasse: hashedPassword });
       case 'livreur':
-        verificationToken.livreur = user;
-        break;
+        return this.livreurRepo.save({ ...payload, motDePasse: hashedPassword });
       case 'fournisseur':
-        verificationToken.fournisseur = user;
-        break;
+        return this.fournisseurRepo.save({ ...payload, motDePasse: hashedPassword });
+      default:
+        throw new Error('Invalid role');
     }
-    
-    await this.verificationTokenRepo.save(verificationToken);
-
-    // Send the email with the verification token
-
   }
 
-  // Verify the email with the token
+  // Verify email method
   async verifyEmail(token: string): Promise<boolean> {
     const verificationToken = await this.verificationTokenRepo.findOne({
       where: { token },
-      relations: [
-        'demandeur',
-        'admin',
-        'traiteur',
-        'livreur',
-        'fournisseur',
-      ],
+      relations: ['demandeur', 'admin', 'traiteur', 'livreur', 'fournisseur'],
     });
-    
-    if (verificationToken && !verificationToken.verifiedAt) {
-      verificationToken.verifiedAt = new Date();
-      await this.verificationTokenRepo.save(verificationToken);
 
-      let user;
-      let repo;
-
-      switch (verificationToken.userType) {
-        case 'demandeur':
-          user = verificationToken.demandeur;
-          repo = this.demandeurRepo;
-          break;
-        case 'admin':
-          user = verificationToken.admin;
-          repo = this.adminRepo;
-          break;
-        case 'traiteur':
-          user = verificationToken.traiteur;
-          repo = this.traiteurRepo;
-          break;
-        case 'livreur':
-          user = verificationToken.livreur;
-          repo = this.livreurRepo;
-          break;
-        case 'fournisseur':
-          user = verificationToken.fournisseur;
-          repo = this.fournisseurRepo;
-          break;
-      }
-
-      if (user) {
-        user.isEmailVerified = true;
-        await repo.save(user);
-        return true;
-      }
+    if (!verificationToken) {
+      throw new Error('Invalid or expired token');
     }
 
-    return false;
+    verificationToken.verifiedAt = new Date();
+    await this.verificationTokenRepo.save(verificationToken);
+
+    // Perform user-specific actions based on the userType
+    if (verificationToken.demandeur) {
+      verificationToken.demandeur.emailVerified = true;
+      await this.demandeurRepo.save(verificationToken.demandeur);
+    } else if (verificationToken.admin) {
+      verificationToken.admin.emailVerified = true;
+      await this.adminRepo.save(verificationToken.admin);
+    } else if (verificationToken.traiteur) {
+      verificationToken.traiteur.emailVerified = true;
+      await this.traiteurRepo.save(verificationToken.traiteur);
+    } else if (verificationToken.livreur) {
+      verificationToken.livreur.emailVerified = true;
+      await this.livreurRepo.save(verificationToken.livreur);
+    } else if (verificationToken.fournisseur) {
+      verificationToken.fournisseur.emailVerified = true;
+      await this.fournisseurRepo.save(verificationToken.fournisseur);
+    }
+
+    return true;
   }
 }
