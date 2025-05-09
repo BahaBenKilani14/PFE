@@ -9,6 +9,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { TraiteurHomeComponent } from './traiteur-home/traiteur-home.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AppComponent } from './app.component';
+import { PlatformModule } from '@angular/cdk/platform';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { AppComponent } from './app.component';
     LoginComponent,
     TraiteurHomeComponent,
     HomeComponent,
-    AppComponent
+    AppComponent,
+    PlatformModule,
   ],
   providers: [
     {

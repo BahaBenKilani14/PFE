@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TraiteurHomeComponent } from "../../traiteur-home/traiteur-home.component";
+import { PlatService } from './plat.service'; // Assuming you have a service to handle API calls
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-mes-plats',
@@ -19,17 +21,16 @@ export class MesPlatsComponent {
 
   // ✅ Attributs alignés avec le backend
   newPlat = {
-    id: '',
     nom: '',
     description: '',
-    prix: '',
+    prix: 0,
     image: '',
     disponible: false
   };
 
-  plats: { id: string; nom: string; description: string; prix: string; image: string; disponible: boolean; }[] = [];
+  plats: { nom: string; description: string; prix: number; image: string; disponible: boolean; }[] = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private platService: PlatService) {}
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -40,17 +41,26 @@ export class MesPlatsComponent {
   }
 
   ajouterPlat() {
-    const platCopie = { ...this.newPlat };
-    this.plats.push(platCopie);
-
-    // Réinitialise le formulaire
-    this.newPlat = {
-      id: '',
-      nom: '',
-      description: '',
-      prix: '',
-      image: '',
-      disponible: false
-    };
+    // Appelle l'API backend pour ajouter le plat
+    this.platService.createPlat(this.newPlat).subscribe({
+      next: (createdPlat) => {
+        // Si succès, ajoute à la liste locale
+        this.plats.push(createdPlat);
+        console.log('✅ Plat ajouté avec succès:', createdPlat);
+        alert('Plat ajouté avec succès!');
+        // Reset form
+        this.newPlat = {
+          nom: '',
+          description: '',
+          prix: 0,
+          image: '',
+          disponible: false
+        };
+      },
+      error: (err) => {
+        console.error('Erreur ajout plat:', err);
+        alert('Erreur lors de l\'ajout du plat'+ JSON.stringify(err.error));
+      }
+    });
   }
 }
