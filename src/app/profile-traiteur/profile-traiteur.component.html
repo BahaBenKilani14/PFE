@@ -1,0 +1,18 @@
+<app-traiteur-home></app-traiteur-home>
+
+<h2>Mes Plats</h2>
+
+<div *ngIf="plats.length > 0; else noPlats">
+  <div *ngFor="let plat of plats" class="card">
+    <img [src]="plat.image" alt="{{ plat.nom }}" width="150">
+    <h3>{{ plat.nom }}</h3>
+    <p>{{ plat.description }}</p>
+    <p>Prix : {{ plat.prix }} TND</p>
+    <p *ngIf="plat.disponible">✅ Disponible</p>
+    <p *ngIf="!plat.disponible">❌ Indisponible</p>
+  </div>
+</div>
+
+<ng-template #noPlats>
+  <p>Vous n'avez pas encore ajouté de plats.</p>
+</ng-template>
